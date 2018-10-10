@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2552e46c16314aa4b9158a96c6bd6332, type: 3}
+  m_Name: Empire Soldiers
+  m_EditorClassIdentifier: 
+  faction: Enemy
+  unitName: Soldier
+  artwork: {fileID: 21300000, guid: f5a674f18b650a543bf859b7f6a7a3be, type: 3}
+  portrait: {fileID: 21300000, guid: 85df1072391081d4e95db6052282635b, type: 3}
+  UI: {fileID: 1441339639918624, guid: c9d13d943fc9b4a418d9f82de14ed474, type: 2}
+  attack: 20
+  health: 190
+  actionPoints: 0
