@@ -65,21 +65,27 @@ public class CombatCameraController : MonoBehaviour {
 
 	IEnumerator WaitforCamera(){
 		yield return new WaitUntil(()=> MainCamera.transform.position == target );
-		Debug.Log("Camera is in position.");
+		//Debug.Log("Camera is in position.");
 		if(OnDone != null){
 			OnDone();
 		}
 	}
 
+	IEnumerator WaitforCameraToReturn(){
+		yield return new WaitUntil(()=> MainCamera.transform.position == oldCameraPosition );
+		//Debug.Log("Camera is in position.");
+		setCameraScriptsTo(true);
+		DoWePauseGame(false);
+	}
 
 	//Unit is done fighitng, calls up the camera to move things back to normal. 
 	//Step 1: Zoom out of the node to the old camera position.
 	//Step 2: Unpause the game. 
 	//Step 3: Reactivate the camera scripts.
-	//This probably needs some more work with the offsets, there might be some snapping going on.  
+	//There is some snapping going on, because camera points to the node but once it reaches the end it snaps back to look at the focus.
+	//The focus being a little above the waypoints.  
 	public void CombatEnds(){
-		setCameraScriptsTo(false);
-		DoWePauseGame(true);
 		MainCamera.GetComponent<MoveFromXtoY>().FromXtoY(MainCamera.transform.position, oldCameraPosition);
+		StartCoroutine(WaitforCameraToReturn());
 	}
 }

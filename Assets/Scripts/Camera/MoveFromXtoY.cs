@@ -29,17 +29,19 @@ public class MoveFromXtoY : MonoBehaviour {
 		lookat = false;
 	}
 
-	IEnumerator LerpFromTo_NoFocus(Vector3 pos1, Vector3 pos2, float duration) {
+	IEnumerator LerpFromToWithFocusSet(Vector3 pos1, Vector3 pos2, float duration) {
+		lookat = true;
 		for (float t=0f; t<duration; t += Time.deltaTime) {
 			this.transform.position = Vector3.Lerp(pos1, pos2, t / duration);
 
 			yield return 0;
 		}
 		this.transform.position = pos2;
+		lookat = false;
 	}
 
 	public void FromXtoY(Vector3 start, Vector3 end){
-		StartCoroutine(LerpFromTo_NoFocus(start, end, 0.4f) );
+		StartCoroutine(LerpFromToWithFocusSet(start, end, 2f) );
 	}
 
 	public void FromXtoY(Vector3 start, Vector3 end, Waypoint focus){
