@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class InputControl : MonoBehaviour
 {
-   public GameObject cameraOrbit;
+    public GameObject cameraOrbit;
     public GameObject cameraFocus;
     public GameObject mapScene;
-   public float rotateSpeed = 10f;
+    public float rotateSpeed = 10f;
 
    void Update()
    {

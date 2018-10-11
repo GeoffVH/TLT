@@ -1,4 +1,12 @@
-﻿using System.Collections;
+﻿//DEPRECIATED SCRIPT.
+//Left intact to rip useful code snippets. 
+//The old method of organizing tactics was to keep them all in one master script. 
+//Problem came from all the camera movements in each combat. It made for even longer scripts.
+
+
+
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using cakeslice;
@@ -26,7 +34,6 @@ public class Tactics_Master_List : MonoBehaviour {
 
 /************************************************************************************************               Get 
 These functions are built to return a value of some kind.
-When building get functions, try to keep them as specific as possible. 
 */ 
 
 
@@ -71,7 +78,7 @@ When building get functions, try to keep them as specific as possible.
 
 
 /************************************************************************************************               Attack 
-These functions are built to assist any attack
+These functions are built to assist attacks
 */
 
 	//Deals set damage to UnitCore target
@@ -278,6 +285,7 @@ If in doubt, better to side on being legible rather than smart.
 		}
 	}
 
+	/* 
 	//Gets the old camera position and then moves the camera to the waypoint. 
 	private  void Action_ZoomInCamera(Waypoint CurrentWaypoint, List<UnitCore> targets){
 		Action_PauseGame();
@@ -285,13 +293,13 @@ If in doubt, better to side on being legible rather than smart.
 
 		Vector3 OldCameraPosition = MainCamera.transform.position;
 		Vector3 offset = new Vector3(1.79628f, 6.673105f ,-7.21338f);
-		helper_MoveFromXtoYSmoothly(OldCameraPosition, CurrentWaypoint.transform.position+offset, MainCamera, CurrentWaypoint);
+		helper_MoveFromXtoYSmoothly(OldCameraPosition, CurrentWaypoint.transform.position+offset, CurrentWaypoint);
 		Debug.Log("We are entering the ZoomOutCameraFromWaypoint.");
 		StartCoroutine(WaitUntilCameraIsInPosition(CurrentWaypoint.transform.position+offset, OldCameraPosition, CurrentWaypoint));
 	}
 
 	private  void helper_MoveFromXtoYSmoothly(Vector3 X, Vector3 Y, GameObject Camera, Waypoint focus){
-		Camera.GetComponent<MoveFromXtoY>().FromXtoY(Camera, X, Y, focus);
+		Camera.GetComponent<MoveFromXtoY>().FromXtoY(Camera, X, Y);
 	}
 
 	IEnumerator WaitUntilCameraIsInPosition(Vector3 CameraPosition, Vector3 OldCameraPosition, Waypoint CurrentWaypoint){
