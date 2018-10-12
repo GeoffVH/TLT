@@ -80,13 +80,16 @@ public class UnitCore : MonoBehaviour {
 	}
 
 	public void ArriveAt(Waypoint newHome){
+		GameObject CombatManager = GameObject.Find("GameManager");
 		if(thisunit.faction == "Player" && newHome.Enemies.Count > 0 && isPaused == false) {
-			Debug.Log("We do fighting");
-			GameObject.Find("CombatManager").GetComponent<CombatCameraController>().CombatStart(newHome);
+			//Debug.Log(this.name + " is sending information to the combat controller now.");
+			CombatManager.GetComponent<CombatMainController>().SendInformation(this.gameObject);
+			CombatManager.GetComponent<CombatCameraController>().CombatStart(newHome);
 		}
 		if(thisunit.faction == "Enemy" && newHome.Allies.Count > 0 && isPaused == false) {
-			Debug.Log("We do fighting");
-			GameObject.Find("CombatManager").GetComponent<CombatCameraController>().CombatStart(newHome);
+			//Debug.Log(this.name + " is sending information to the combat controller now.");
+			CombatManager.GetComponent<CombatMainController>().SendInformation(this.gameObject);
+			CombatManager.GetComponent<CombatCameraController>().CombatStart(newHome);
 		}
 	}
 

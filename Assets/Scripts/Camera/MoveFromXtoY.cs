@@ -45,7 +45,7 @@ public class MoveFromXtoY : MonoBehaviour {
 	}
 
 	public void FromXtoY(Vector3 start, Vector3 end){
-		StartCoroutine(LerpFromToWithFocusSet(start, end, 2f) );
+		StartCoroutine(LerpFromToWithFocusSet(start, end, 0.4f) );
 	}
 
 	public void FromXtoY(Vector3 start, Vector3 end, Waypoint focus){

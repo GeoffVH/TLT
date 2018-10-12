@@ -1,0 +1,50 @@
+how do we pass data from the unit to the combat manager? 
+
+Who knows when the camera is in position?
+-Not the camera manager
+-Not the unit
+-Only the combat manager knows when it put the camera in position. 
+    -But the combat manager doesn't know anything about the unit. 
+
+
+Unit sends it's junk to combat manager right before the camera calls to move?
+Then the combat manager has all the unit's ID by the time the camera rolls in. 
+
+We have sucessfully added a solid trigger to the unit. Now, we need to make sure that the pause feature works as needed. 
+The problem is what happens if units reach the point at exactly the same time? 
+
+There's a bug where moving three units onto the node does not trigger three seperate combat moments. 
+Having the units give their orders based on if they arrived or not may have problems when moving more than one unit. 
+And we will want multi-unit movements using card plays. 
+
+We have onselected hold the full list of units. Maybe use that to go through units turn by turn? 
+Maybe look further into the game and see how multiple units can reach the same point at the same time. 
+Possibly vary the unit's speeds using a weighted randomizer?
+    -> Significantly reduces the chance units run into the node at the same exact time. 
+    -> But does not completely eliminate it. There might still be a single possible edge case where units do slip together.
+    -> And players would absolutely hate that. 
+    -> So while this is an easy way out, it's not a solid way out. 
+
+    -> Further testing finds this very, very difficult to replicate without even modifying movespeed.
+    -> Perhaps it might be a solution?
+    -> No this is dumb. I'm not going to hazard even a 1 in a billion chance of disapointing a player by having their unit skip a turn. 
+    
+    -> We could store a list of gameobjects and have it go a first in last out setup. 
+        -> So combat manager stores gameobjects. each time the camera is ready to roll, it grabs one of those and plays it.
+        -> Once it's played, it's removed from the list. 
+        -> We could even have the combat itself triggered only if the list has a size > 0.
+
+Problem is that each unit triggers combat. 
+But combat is setup to be resolved as a group. 
+Which means that moving three units into the fight triggers each unit before the combat is resolved. 
+It's a wonder that hasn't crashed. 
+
+I need to find a way to trigger combat as a group. 
+The only place where the player selects once is on the onselected script. 
+Maybe I should have it hook up a check for combat. 
+
+This did not work. Not at all. The list idea is good, but the trigger needs to be fired only once. 
+We can revisit that later. 
+
+At the moment, I think it's not possible for a unit to reach their target at the same exact nano-second as another. 
+It might be better to keep the setup as is for now. 

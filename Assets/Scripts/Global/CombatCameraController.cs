@@ -30,6 +30,7 @@ public class CombatCameraController : MonoBehaviour {
 
 	// TODO: change this to a unity event maybe? 
 	void Update () {
+		
 	}
 
 	private void DoWePauseGame(bool flag){
@@ -41,6 +42,13 @@ public class CombatCameraController : MonoBehaviour {
 		foreach (Transform child in PlayerUnits.transform){
 			child.GetComponent<UnitCore>().isPaused = flag;
 			//Debug.Log("We have paused " + child.GetComponent<UnitCore>().name);
+		}
+
+		if(flag){
+			Debug.Log("Game Paused.");
+		}
+		else{
+			Debug.Log("Game Unpaused.");
 		}
 	}
 
@@ -73,7 +81,7 @@ public class CombatCameraController : MonoBehaviour {
 
 	IEnumerator WaitforCameraToReturn(){
 		yield return new WaitUntil(()=> MainCamera.transform.position == oldCameraPosition );
-		//Debug.Log("Camera is in position.");
+		Debug.Log("Camera is in position.");
 		setCameraScriptsTo(true);
 		DoWePauseGame(false);
 	}
