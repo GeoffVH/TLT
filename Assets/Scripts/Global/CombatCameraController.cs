@@ -35,12 +35,12 @@ public class CombatCameraController : MonoBehaviour {
 	private void DoWePauseGame(bool flag){
 		foreach (Transform child in EnemyUnits.transform){
 			child.GetComponent<UnitCore>().isPaused = flag;
-			Debug.Log("We have paused " + child.GetComponent<UnitCore>().name);
+			//Debug.Log("We have paused " + child.GetComponent<UnitCore>().name);
 		}
 
 		foreach (Transform child in PlayerUnits.transform){
 			child.GetComponent<UnitCore>().isPaused = flag;
-			Debug.Log("We have paused " + child.GetComponent<UnitCore>().name);
+			//Debug.Log("We have paused " + child.GetComponent<UnitCore>().name);
 		}
 	}
 
@@ -81,10 +81,9 @@ public class CombatCameraController : MonoBehaviour {
 	//Unit is done fighitng, calls up the camera to move things back to normal. 
 	//Step 1: Zoom out of the node to the old camera position.
 	//Step 2: Unpause the game. 
-	//Step 3: Reactivate the camera scripts.
-	//There is some snapping going on, because camera points to the node but once it reaches the end it snaps back to look at the focus.
-	//The focus being a little above the waypoints.  
+	//Step 3: Reactivate the camera scripts. 
 	public void CombatEnds(){
+		
 		MainCamera.GetComponent<MoveFromXtoY>().FromXtoY(MainCamera.transform.position, oldCameraPosition);
 		StartCoroutine(WaitforCameraToReturn());
 	}

@@ -13,9 +13,13 @@ public class MoveFromXtoY : MonoBehaviour {
 
 	bool lookat = false;
 	Waypoint node;
+	Vector3 yOffset = new Vector3(0.0f, 1.0f, 0.0f);
 
+	//We want to keep the camera looking at the same target, but while the script is active there's a good chance the 
+	//camera scripts are inactive. This is why we have this lookat function take over. It still needs to be turned off
+	//so that when the camera scripts are re-activated they can move the camera and focus on other nodes unheeded. 
 	void Update(){
-		if(lookat) this.transform.LookAt(node.transform.position);
+		if(lookat) this.transform.LookAt(node.transform.position+yOffset);
 	}
 
 	IEnumerator LerpFromTo(Vector3 pos1, Vector3 pos2, float duration) {
