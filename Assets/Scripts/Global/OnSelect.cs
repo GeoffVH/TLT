@@ -111,8 +111,10 @@ namespace cakeslice
 		//This function is a total mess and needs some polish and refactoring - but it works just well enough :D
 		//This works like a hobbled together foreach loop, going backwards in selected. 
 		IEnumerator SetupLine(GameObject node, bool firstloop) {
+
+			float randomizedTiming = Random.Range(0.2f, 0.3f);
 			if(firstloop) yield return new WaitUntil(()=> firstloop == true);
-			else yield return new WaitForSeconds(0.2f);
+			else yield return new WaitForSeconds(randomizedTiming);
 			
 
 			if(selected.Count > 0){
