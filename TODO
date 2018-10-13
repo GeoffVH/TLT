@@ -48,3 +48,11 @@ We can revisit that later.
 
 At the moment, I think it's not possible for a unit to reach their target at the same exact nano-second as another. 
 It might be better to keep the setup as is for now. 
+
+NEVERMIND - Problem happened again where one unit was skipped for no reason. Couldn't find even a call on the debuglog.
+This problem might only happen once in 20 attemps. But that's still hella bad results. 
+Still not a major problem right now though, but it'll need to be fixed. 
+
+Today's agenda will be to bring up the sprites to the camera. 
+To do that we'll need to know the target and the calling unit. 
+Attention should be put to making the target(s) something scalable. We know only one unit calls up the action but there may be multiple targets. 
