@@ -102,30 +102,73 @@ namespace cakeslice
 					//Move each troop selected to the new node.
 					//Toggle off highlight
 					//Deselect all units, and clear the list.
-					foreach(GameObject troop in selected){
-						Waypoint oldHome = new GetClosestWaypoint().search(troop.transform.position);
-						Waypoint newHome = node.GetComponent<Waypoint>();
-						Unit troopInfo = troop.GetComponent<UnitCore>().thisunit;
-						troop.GetComponent<Outline>().enabled = false;
-						troop.GetComponent<UnitCore>().isSelected = false;
-
-						if(oldHome == newHome) continue;
-						
-						if(troopInfo.faction == "Player"){
-							oldHome.AllyRemove(troop);
-							newHome.AllyAdd(troop);
-							troop.GetComponent<Movement>().MoveTo(newHome, "Right", newHome.Allies.Count, true);
-						}
-
-						if(troopInfo.faction == "Enemy"){
-							oldHome.EnemyRemove(troop);
-							newHome.EnemyAdd(troop);
-							troop.GetComponent<Movement>().MoveTo(newHome, "Left", newHome.Enemies.Count, true);
-						}
-					}
-					selected.Clear();
+					StartCoroutine(SetupLine(node, true));
+					
 				}
 			}
+		}
+
+		//This function is a total mess and needs some polish and refactoring - but it works just well enough :D
+		//This works like a hobbled together foreach loop, going backwards in selected. 
+		IEnumerator SetupLine(GameObject node, bool firstloop) {
+			if(firstloop) yield return new WaitUntil(()=> firstloop == true);
+			else yield return new WaitForSeconds(0.2f);
+			
+
+			if(selected.Count > 0){
+				
+				GameObject troop = selected[selected.Count - 1];
+				Waypoint oldHome = new GetClosestWaypoint().search(troop.transform.position);
+				Waypoint newHome = node.GetComponent<Waypoint>();
+				Unit troopInfo = troop.GetComponent<UnitCore>().thisunit;
+				troop.GetComponent<Outline>().enabled = false;
+				troop.GetComponent<UnitCore>().isSelected = false;
+
+				if(oldHome != newHome){
+
+					if(troopInfo.faction == "Player"){
+						oldHome.AllyRemove(troop);
+						newHome.AllyAdd(troop);
+						troop.GetComponent<Movement>().MoveTo(newHome, "Right", newHome.Allies.Count, true);
+					}
+
+					if(troopInfo.faction == "Enemy"){
+						oldHome.EnemyRemove(troop);
+						newHome.EnemyAdd(troop);
+						troop.GetComponent<Movement>().MoveTo(newHome, "Left", newHome.Enemies.Count, true);
+					}
+				}
+				if(selected.Count == 1) selected.RemoveAt(selected.Count-1);
+				else{
+					selected.RemoveAt(selected.Count-1);
+					StartCoroutine(SetupLine(node, false));
+				}
+			}
+			
+
+/* 
+			foreach(GameObject troop in selected){
+				Waypoint oldHome = new GetClosestWaypoint().search(troop.transform.position);
+				Waypoint newHome = node.GetComponent<Waypoint>();
+				Unit troopInfo = troop.GetComponent<UnitCore>().thisunit;
+				troop.GetComponent<Outline>().enabled = false;
+				troop.GetComponent<UnitCore>().isSelected = false;
+
+				if(oldHome == newHome) continue;
+				
+				if(troopInfo.faction == "Player"){
+					oldHome.AllyRemove(troop);
+					newHome.AllyAdd(troop);
+					troop.GetComponent<Movement>().MoveTo(newHome, "Right", newHome.Allies.Count, true);
+				}
+
+				if(troopInfo.faction == "Enemy"){
+					oldHome.EnemyRemove(troop);
+					newHome.EnemyAdd(troop);
+					troop.GetComponent<Movement>().MoveTo(newHome, "Left", newHome.Enemies.Count, true);
+				}
+			}
+ */
 		}
 	}
 }
