@@ -53,15 +53,33 @@ NEVERMIND - Problem happened again where one unit was skipped for no reason. Cou
 This problem might only happen once in 20 attemps. But that's still hella bad results. 
 Still not a major problem right now though, but it'll need to be fixed. 
 
-Today's agenda will be to bring up the sprites to the camera. 
-To do that we'll need to know the target and the calling unit. 
-Attention should be put to making the target(s) something scalable. We know only one unit calls up the action but there may be multiple targets. 
-
 AH! But what if we impliment a small time delay when moving units so they arrive in single file line? So when we move, they don't move all at once but instead one after another.
-Time delay of .2 seconds would work just fine enough probably. I can impliment this on our on-select code. 
+Time delay of .2-.3 seconds would work just fine enough probably. I can impliment this on our on-select code. 
 
 Got that implimented, messily, but it works. Just not enough to make me confident in it. There's still a possible chance of it going wrong. 
 Still, I learned using a recursive timer call might work for our original list idea. Ultimately we'll need to impliment that instead. 
 But for now it works and I'm moving on, up until it doesn't. I'll leave a comment for future me to remember this possible avenue for solution. 
 This certainly won't come back to bite me later, no sir. 
 
+Today's agenda will be 
+Attention should be put to making the target(s) something scalable. 
+We know only one unit calls up the action but there may be multiple targets. 
+The tactic should determine how many targets. So tentative plan: 
+    -> When the unit reaches the node, it'll select a tactic.
+    -> Then it will pass that tactic to the combat manager. 
+    -> The manager handles the rest, selecting a target(s) for the calling unit.
+
+So a dummy tactic should be made that's just a standin for the real ones. 
+We should have two, one that targets a single target and one that targets multiple targets. 
+Targets could be either enemy or ally, but let's restrict that to only all enemies or all allies. 
+
+Added in a tactic abstract class that has a handful of useful generic data and an activate function. 
+All tactics will be derivatives of this, each overriding the activate function and making use of the data it's got. 
+Each unit gets a list of these tactics to add. 
+Debating if I should make a few more generic functions, like "Select Target"
+Good wrap for today though. 
+
+
+
+
+ 

@@ -30,6 +30,7 @@ public class UnitCore : MonoBehaviour {
 	bool isDead = false;
 	Renderer _renderer;
 	int shaderProperty;
+	public List<Tactic> Tactics;
 
 	// Use this for initialization
 	void Start () {
@@ -82,15 +83,20 @@ public class UnitCore : MonoBehaviour {
 	public void ArriveAt(Waypoint newHome){
 		GameObject CombatManager = GameObject.Find("GameManager");
 		if(thisunit.faction == "Player" && newHome.Enemies.Count > 0 && isPaused == false) {
-			//Debug.Log(this.name + " is sending information to the combat controller now.");
 			CombatManager.GetComponent<CombatMainController>().SendInformation(this.gameObject);
+			//Pick tactic and send to combat manager. 
 			CombatManager.GetComponent<CombatCameraController>().CombatStart(newHome);
 		}
 		if(thisunit.faction == "Enemy" && newHome.Allies.Count > 0 && isPaused == false) {
-			//Debug.Log(this.name + " is sending information to the combat controller now.");
+			Debug.Log(this.name + " is sending information to the combat controller now.");
 			CombatManager.GetComponent<CombatMainController>().SendInformation(this.gameObject);
+			//Pick tactic and send to combat manager. 
 			CombatManager.GetComponent<CombatCameraController>().CombatStart(newHome);
 		}
+	}
+
+	public void selectTactic(){
+
 	}
 
 	public void death(){

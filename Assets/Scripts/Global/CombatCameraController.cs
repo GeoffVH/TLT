@@ -43,13 +43,6 @@ public class CombatCameraController : MonoBehaviour {
 			child.GetComponent<UnitCore>().isPaused = flag;
 			//Debug.Log("We have paused " + child.GetComponent<UnitCore>().name);
 		}
-
-		if(flag){
-			Debug.Log("Game Paused.");
-		}
-		else{
-			Debug.Log("Game Unpaused.");
-		}
 	}
 
 	private  void setCameraScriptsTo(bool flag){
@@ -73,7 +66,6 @@ public class CombatCameraController : MonoBehaviour {
 
 	IEnumerator WaitforCamera(){
 		yield return new WaitUntil(()=> MainCamera.transform.position == target );
-		//Debug.Log("Camera is in position.");
 		if(OnDone != null){
 			OnDone();
 		}
@@ -81,7 +73,6 @@ public class CombatCameraController : MonoBehaviour {
 
 	IEnumerator WaitforCameraToReturn(){
 		yield return new WaitUntil(()=> MainCamera.transform.position == oldCameraPosition );
-		Debug.Log("Camera is in position.");
 		setCameraScriptsTo(true);
 		DoWePauseGame(false);
 	}

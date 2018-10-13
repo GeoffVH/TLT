@@ -30,13 +30,12 @@ public class CombatMainController : MonoBehaviour {
 	}
 
 	public void SendInformation(GameObject called){
-		Debug.Log("Unit has sent it's information as " + called.name);
+		//Debug.Log("Unit has sent it's information as " + called.name);
 		CallingUnits.Add(called);
 	}
 
 	IEnumerator debugwait(){
 		yield return new WaitForSeconds(1);
 		this.gameObject.GetComponent<CombatCameraController>().CombatEnds();
-		Debug.Log("Camera returned to position");
 	}
 }
