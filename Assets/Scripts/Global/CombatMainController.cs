@@ -8,6 +8,8 @@ public class CombatMainController : MonoBehaviour {
 	
 	public List<GameObject> CallingUnits;
 	public bool CameraZoomedIn;
+	private GameObject MainUnit;
+	private Waypoint currentNode;
 	
 	// Use this for initialization
 	void Start () {
@@ -25,18 +27,27 @@ public class CombatMainController : MonoBehaviour {
 		//Grabs the last item in the list, pops it.
 		GameObject item = CallingUnits[(CallingUnits.Count - 1)];
 		CallingUnits.RemoveAt((CallingUnits.Count - 1));
-		Debug.Log(item.name + " now pretends it's doing something to someone.");
-		StartCoroutine(debugwait());
+		MainUnit = item;
+		currentNode = MainUnit.GetComponent<UnitCore>().home;
+		StartCoroutine(debugwaitAttacker());
 	}
 
 	public void SendInformation(GameObject called){
-		Debug.Log("Unit has sent it's information as " + called.name);
 		CallingUnits.Add(called);
 	}
 
-	IEnumerator debugwait(){
-		yield return new WaitForSeconds(1);
+	IEnumerator debugwaitAttacker(){
+		yield return new WaitForSeconds(0.5f);
+
+		UnitCore thisUnit = MainUnit.GetComponent<UnitCore>();
+		Tactic testStrat = thisUnit.selectTactic();
+		Debug.Log(thisUnit.name + " now pretends it's doing something to someone.");
+		testStrat.onUse(currentNode, thisUnit);
+		StartCoroutine(debugwaitDefender());
+	}
+
+	IEnumerator debugwaitDefender(){
+		yield return new WaitForSeconds(0.5f);
 		this.gameObject.GetComponent<CombatCameraController>().CombatEnds();
-		Debug.Log("Camera returned to position");
 	}
 }

@@ -8,8 +8,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cac99f7e2d634c84d9d82c332f56692d, type: 3}
-  m_Name: DebugTactic
+  m_Script: {fileID: 11500000, guid: 5b206691d2eb87b4a8f9639a1285b41a, type: 3}
+  m_Name: Light Attack
   m_EditorClassIdentifier: 
-  NumberOfTargets: 0
+  description: 'Target a random enemy unit and deal light damage to it.
+
+    Targetted enemy cannot retaliate. '
+  NumberOfTargets: 1
   allowRetalition: 0

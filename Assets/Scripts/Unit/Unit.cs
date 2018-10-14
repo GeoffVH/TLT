@@ -19,5 +19,5 @@ public class Unit : ScriptableObject {
 	public int attack;
 	public int health;
 	public int actionPoints;
-	//public Tactic[] tactics;
+	public List<Tactic> tactics;
 }

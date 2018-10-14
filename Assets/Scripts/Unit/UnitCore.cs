@@ -30,6 +30,7 @@ public class UnitCore : MonoBehaviour {
 	bool isDead = false;
 	Renderer _renderer;
 	int shaderProperty;
+	public Waypoint home;
 
 	// Use this for initialization
 	void Start () {
@@ -50,7 +51,7 @@ public class UnitCore : MonoBehaviour {
 		GeneratedUI.GetComponent<LinkDebugToUnit>().HealthChanged(this);
 		GeneratedUI.GetComponent<LinkDebugToUnit>().ColorFlash(Color.black);
 		GeneratedUI.GetComponentInChildren<Image>().sprite = thisunit.portrait;		
-		Waypoint home = AssignToWaypoint();
+		home = AssignToWaypoint();
 		
 		if(thisunit.faction =="Player"){
 			this.gameObject.GetComponent<Outline>().color = 3;
@@ -91,6 +92,11 @@ public class UnitCore : MonoBehaviour {
 			CombatManager.GetComponent<CombatMainController>().SendInformation(this.gameObject);
 			CombatManager.GetComponent<CombatCameraController>().CombatStart(newHome);
 		}
+	}
+
+	//This function will eventually become huge. Should unitcore hold it or the unit SO itself? 
+	public Tactic selectTactic(){
+		return thisunit.tactics[Random.Range(0, thisunit.tactics.Count)];
 	}
 
 	public void death(){
