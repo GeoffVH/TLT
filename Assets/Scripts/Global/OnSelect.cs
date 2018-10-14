@@ -43,7 +43,7 @@ namespace cakeslice
 
 
 
-		//Oh good god, what have I created. I will repent for my sins. But sometime later.  
+
 		void Update()
 		{
 			Ray ray = Camera.main.ScreenPointToRay( Input.mousePosition );
@@ -55,6 +55,7 @@ namespace cakeslice
 
 				//if click on a waypoint, move camera to that waypoint
 				if( Physics.Raycast( ray, out hit, Mathf.Infinity, Moveable) ){
+					Debug.Log("We clicked a waypoint");
 					GameObject node = hit.transform.gameObject;
 					Vector3 yOffset = new Vector3(0.0f, 1.0f, 0.0f);
 					StartCoroutine(LerpFromTo(CameraOrbit.transform.position, node.transform.position, 1f, CameraOrbit) );
@@ -96,29 +97,28 @@ namespace cakeslice
 					StartCoroutine(LerpFromTo(CameraFocus.transform.position, node.transform.position+yOffset, 1f, CameraFocus) );
 					//Can do a check for each unit to see if their home node has a waypoint connected to the node.
 					
-
+					//Detatch each troop from the previous node.
+					//Attatch each troop to the new node.
+					//Move each troop selected to the new node.
+					//Toggle off highlight
+					//Deselect all units, and clear the list.
 					StartCoroutine(SetupLine(node, true));
 					
 				}
 			}
 		}
 
-		//This function is a total mess and needs some polish and refactoring - but it works just well enough to not rewrite :D
+		//This function is a total mess and needs some polish and refactoring - but it works just well enough :D
 		//This works like a hobbled together foreach loop, going backwards in selected. 
 		IEnumerator SetupLine(GameObject node, bool firstloop) {
 
-			float randomizedTiming = Random.Range(0.2f, 0.4f);
+			float randomizedTiming = Random.Range(0.2f, 0.3f);
 			if(firstloop) yield return new WaitUntil(()=> firstloop == true);
 			else yield return new WaitForSeconds(randomizedTiming);
 			
 
 			if(selected.Count > 0){
 				
-				//Detatch each troop from the previous node.
-				//Attatch each troop to the new node.
-				//Move each troop selected to the new node.
-				//Toggle off highlight
-				//Deselect all units, and clear the list.
 				GameObject troop = selected[selected.Count - 1];
 				Waypoint oldHome = new GetClosestWaypoint().search(troop.transform.position);
 				Waypoint newHome = node.GetComponent<Waypoint>();

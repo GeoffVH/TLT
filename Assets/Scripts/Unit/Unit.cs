@@ -11,7 +11,6 @@ using UnityEngine.UI;
 
 [CreateAssetMenu(fileName = "New Unit", menuName = "Unit")]
 public class Unit : ScriptableObject {
-	
 	public string faction;
 	public string unitName;
 	public Sprite artwork;
@@ -20,7 +19,5 @@ public class Unit : ScriptableObject {
 	public int attack;
 	public int health;
 	public int actionPoints;
-
-	public List<Tactic> Tactics;
-	
+	//public Tactic[] tactics;
 }

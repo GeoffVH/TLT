@@ -19,5 +19,3 @@ MonoBehaviour:
   attack: 20
   health: 190
   actionPoints: 0
-  Tactics:
-  - {fileID: 0}
