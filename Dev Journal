@@ -129,3 +129,35 @@ CombatManager needs to loop through a given list of targets, using the tactic ch
 -> CombatManager needs to use tactics to assign damage/healing, ect to units at the right time.
 
 All of this needs to be modular enough new check functions can be added into it. 
+
+
+So TODO: 
+UnitCore needs a function to pick a favored tactic based on the unit's parameters. 
+UnitCore needs a function to pick a sorted list of targets based on the unit's parameters. 
+UnitCore hands these two to CombatManager. 
+CombatManager needs to loop through a given list of targets, using the tactic chosen as the size of the loop. 
+
+Should make Debug Tactics:
+
+1) Debug_RandomSingleAttack - Targets a random enemy unit and deals damage. 
+2) Debug_RandomMultiAttack - Targets 2 random enemy units and deal damage. 
+3) Debug_HealSingleTarget - Targets a random ally and heals damage. 
+4) Debug_HealMultiTarget - Targets 2 random allies and heals damage. 
+
+Implimented a random single attack correctly. Currently working on the healing version of it. 
+Not suprisingly, healing and damaging are just flip sides of the same coin. 
+The real meat is getting the correct targets lined up. Or rather, filtering the targets.
+
+Now there needs to be a way to stop a support unit from using it's buff on itself. 
+Done, but now there's more filtering to do. 
+
+How does a unit decide what it wants to use? 
+Let's use an example: 
+
+A support unit favors using support tactics above attacking tactics.
+It runs into a node with both enemies and allies. 
+It has 3/4 chances of using a support tactic on an ally and 1/4 chances of using an attack instead, starting with vanguards. 
+
+A blockade unit favors using attacking tactics above support tactics. 
+It runs into a node with both enemies and allies. 
+It has 3/4ths chances of using an attack tactic on an enemy, starting with vanguards first. 

@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 76f57f10348887444831410fe8cf9b4e, type: 3}
+  m_Name: Light Support
+  m_EditorClassIdentifier: 
+  description: Target a random enemy unit and heal light damage to it.
+  NumberOfTargets: 1
+  allowRetalition: 0
+  isSupport: 1
+  heal: 41.91133

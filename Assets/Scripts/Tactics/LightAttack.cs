@@ -13,7 +13,7 @@ public class LightAttack : Tactic {
 	public override void onUse(Waypoint Current, GameObject CallingUnit, GameObject Target){
 		damage = Random.Range(0.2f,0.3f)*CallingUnit.GetComponent<UnitCore>().health;
 		UnitCore target_UnitCore = Target.GetComponent<UnitCore>();
-		Attack_Target((int)damage, target_UnitCore);
+		Action_ModifyTargetHealth(-(int)damage, target_UnitCore);
 		Action_SendUIColor(target_UnitCore, getColor());
 	}
 

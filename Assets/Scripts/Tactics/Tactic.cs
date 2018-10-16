@@ -19,10 +19,9 @@ public abstract class Tactic : ScriptableObject {
 								GameObject CallingUnit, 
 								GameObject Target);
 
-	//Deals set damage to UnitCore target
-	public void Attack_Target(int damage, UnitCore target){
-		target.health -= damage;
-		Debug.Log("Dealt " + damage + " to " + target.name);
+	//Adds amount to a target health, updates it's UI, checks if it dies. 
+	public void Action_ModifyTargetHealth(int amount, UnitCore target){
+		target.health += amount;
 		Action_UpdateUIHealth(target);
 		Action_IfDeadKillUnit(target);
 	}	
@@ -39,7 +38,7 @@ public abstract class Tactic : ScriptableObject {
 
 	//This function will choose if the target remains on the field.
 	public  void Action_IfDeadKillUnit(UnitCore target){
-		if(target.health < 0){
+		if(target.health <= 0){
 			target.death();
 		}
 	}

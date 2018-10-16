@@ -13,6 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   faction: Enemy
   unitName: Empire Paladins
+  unitClass: Support
   artwork: {fileID: 21300000, guid: 8ee45a4853fae954fb76ba7b83df2af4, type: 3}
   portrait: {fileID: 21300000, guid: 1e033fe714c4fc4408919a5c256f74a8, type: 3}
   UI: {fileID: 1441339639918624, guid: c9d13d943fc9b4a418d9f82de14ed474, type: 2}
@@ -21,3 +22,4 @@ MonoBehaviour:
   actionPoints: 0
   tactics:
   - {fileID: 11400000, guid: 6c2f650fec15d4f46b37c93df1c28852, type: 2}
+  - {fileID: 11400000, guid: 43683e85137ba8342952698ee9231406, type: 2}

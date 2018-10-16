@@ -113,43 +113,43 @@ public class UnitCore : MonoBehaviour {
 		}
 	}
 
-	//This function will eventually become huge. 
-	//This function will select a tactic. If flow is set to true, it will return a support tactic, else an attacking one.
-	public Tactic selectTactic_isSupport(bool flow){
-
-		if(flow){
-			if(Supporting.Count != 0){
-				return Supporting[Random.Range(0, Supporting.Count)];
-			}
-		}
-		else{
-			if(Attacking.Count != 0){
-				return Attacking[Random.Range(0, Attacking.Count)];
-			}
-		}
-		Debug.Log("ERROR: " + thisunit.name + " has no tactics assigned to it!");
-		return null;
+	//Randomly selects a unit from a list of units. 
+	public GameObject selectFrom(List<GameObject> targets){
+		return targets[Random.Range(0, targets.Count)];
 	}
 
-	//This function returns a list of opposing targets if flow is true, or allied targets if flow is false.  
-	public List<GameObject> selectAllEnemies(bool flow){
-		if(thisunit.faction == "Player"){
-			if(flow){
-				return home.Enemies;
-			}
-			else return home.Allies;
-		}
-		else{
-			if(flow){
-				return home.Allies;
-			}
-			else{
-				return home.Enemies;
-			}
-		}
-		
+	//Randomly selects a tactic from a given list of tactics 
+	public Tactic get_randomTactic(List<Tactic> items){
+		return items[Random.Range(0, items.Count)];
 	}
 
+	//Randomly selects a supporting tactic from the unit's list of tactics. 
+	public Tactic get_RandomSupportTactic(){
+		return Supporting[Random.Range(0, Supporting.Count)];
+	}
+
+	//Randomly selects an attacking tactic from the unit's list of tactics. 
+	public Tactic get_RandomAttackTactic(){
+		return Attacking[Random.Range(0, Attacking.Count)];
+	}
+
+	//Gets a list of units on the current node that are opposed to this unit.
+	public List<GameObject> Get_EnemyList(){
+		if(thisunit.faction == "Player") return home.Enemies;
+		else return home.Allies;
+	}
+
+	//Gets a list of units on the current node that are allied to the unit, excluding the unit itself. 
+	public List<GameObject> Get_AllyList(){
+		List<GameObject> clone = new List<GameObject>();
+		if(thisunit.faction == "Player") clone.AddRange(home.Allies);
+		else clone.AddRange(home.Enemies);
+
+		clone.Remove(gameObject);
+		return clone;
+	}
+
+	//TargettingPackage holds a gameobject list containing all info unit might need. 
 	public struct targettingPackage{
 		public GameObject TargetList;
 		public Tactic SelectedTactic;
@@ -160,31 +160,58 @@ public class UnitCore : MonoBehaviour {
 		}
 	}
 
-	public GameObject selectFrom(List<GameObject> targets){
-		GameObject selected = targets[Random.Range(0, targets.Count)];
-		//Debug.Log("Selected unit: " + selected.name);
-		return targets[Random.Range(0, targets.Count)];
+	//Organizes and returns a package for the combat manager's use. 
+	public targettingPackage getTargetandTactic(){ 
+		Tactic chosenTactic = DecideOnTactic();
+		GameObject chosenTarget = DecideOnTarget(chosenTactic);
+		return new targettingPackage(chosenTarget, chosenTactic);
 	}
 
+	//Returns a tactic that the unit chooses to use.
+	//Unit should be able to pick from all it's tactics, with albit with weighting. 
+	//condition: Support tactics can't be used if there are no supporting units. 
+	//Condition: Attacking tactics can't be used if there are no enemy units. 
+	public Tactic DecideOnTactic(){
 
-	//TargettingPackage holds a gameobject list containing all info unit might need. 
-	public targettingPackage getTargetandTactic(){
-		//decide if a supporting package should be sent.
-		//decide if an attacking package should be sent.
-		//Decide on a list of friendly or enemy targets. 
-		//Organize that list based on unit preferences. 
-
-		//For now, let's default to a random tactic. 
+		List<Tactic> WeightedList = new List<Tactic>();
+		WeightedList.AddRange(Attacking);
+		WeightedList.AddRange(Supporting);
+		if(thisunit.unitClass == "Support"){
+			WeightedList.AddRange(Supporting);
+			WeightedList.AddRange(Supporting);
+		}
+		else{
+			WeightedList.AddRange(Attacking);
+			WeightedList.AddRange(Attacking);
+		}
 		
-		GameObject selectedTarget = selectFrom(selectAllEnemies(true));
-		return new targettingPackage( selectedTarget, selectTactic_isSupport(false));
+		if(Get_AllyList().Count > 0 && Get_EnemyList().Count > 0){
+			return WeightedList[Random.Range(0, WeightedList.Count)];
+		}
+		else{
+			if(Get_AllyList().Count > 0 &&  Get_EnemyList().Count == 0){
+				return get_RandomSupportTactic();
+			}
+			else{
+				return get_RandomAttackTactic();
+			}
+		} 
 	}
 
-	
+	//Returns a target that the unit chooses to use. 
+	public GameObject DecideOnTarget(Tactic chosenTactic){
+		GameObject SelectedTarget;
+		if(chosenTactic.isSupport){
+			SelectedTarget = selectFrom(Get_AllyList());
+		}
+		else{
+			SelectedTarget = selectFrom(Get_EnemyList());
+		}
+		return SelectedTarget;
+	}
 
 	public void death(){
 		if(this.gameObject != null){
-			
 			Waypoint home = new GetClosestWaypoint().search(this.transform.position);
 			if(thisunit.faction == "Player") home.Allies.Remove(this.gameObject);
 			if(thisunit.faction == "Enemy") home.Enemies.Remove(this.gameObject);
