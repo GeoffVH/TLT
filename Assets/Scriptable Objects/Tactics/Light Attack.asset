@@ -16,3 +16,4 @@ MonoBehaviour:
     Targetted enemy cannot retaliate. '
   NumberOfTargets: 1
   allowRetalition: 0
+  isSupport: 0

@@ -107,8 +107,8 @@ If your created function does not fit any of the above category, it can be put a
 
 	//This function will choose if the target remains on the field.
 	private  void Action_IfDeadKillUnit(UnitCore target){
-		if(Check_isDead(target)){
-			Action_CallUnitDeath(target);
+		if(target.health < 0){
+			target.death();
 		}
 	}
 
