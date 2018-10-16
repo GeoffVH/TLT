@@ -17,5 +17,7 @@ MonoBehaviour:
   portrait: {fileID: 21300000, guid: cedcac54ad2a93142adcda9377779e65, type: 3}
   UI: {fileID: 1441339639918624, guid: c9d13d943fc9b4a418d9f82de14ed474, type: 2}
   attack: 45
-  health: 1200
+  health: 120
   actionPoints: 0
+  tactics:
+  - {fileID: 11400000, guid: 6c2f650fec15d4f46b37c93df1c28852, type: 2}

@@ -65,3 +65,67 @@ Still, I learned using a recursive timer call might work for our original list i
 But for now it works and I'm moving on, up until it doesn't. I'll leave a comment for future me to remember this possible avenue for solution. 
 This certainly won't come back to bite me later, no sir. 
 
+I should impliment more try/catch, make it a general rule to do that. Will help debugging. 
+
+Let's think more about combat. 
+-> Units have favorite tactics. 
+-> Unit classes affect who they tend to target.
+    -> Vanguard is first target for all units except assassins who bypass vanguards. 
+    -> After that the list are variable depending on which class. 
+Where do we impliment this? 
+
+It can't be inside a tactic. The unit selects a target first, and then selects it's tactic. 
+Tactic should have no say in who it targets. 
+
+Should this be impliment in UnitCore, or in the combat controller?
+It's the unit that selects it's target. This filter should be set inside unitcore. 
+
+Created a struct in UnitCore that returns a list of targets and a selected tactic. 
+Now we have to figure out how to best set this up. 
+
+Tactics could be used on friendly allies. 
+And sometimes, units will prioritize those tactics even if they could attack an enemy.
+This will affect the targets, obviously.  
+But currently our select target and select tactics methods do not communicate at all with each other. 
+Let's break it down. 
+
+When a unit walks onto a node, it should scan to see if there's anyone home. 
+Units have favorite tactics to use, and favorite targets. 
+-> So during our select target we should prioritize those targets. (Modify selectTarget)
+-> Tactics should be based on if the targets are friendly or enemy. 
+
+Why not just grab every piece of info possible and send it. Then have the tactic be used on whichever?
+E.G. generically always grab all the enemies, and all the allies, and then use both? 
+We could have Unit hold two tactics list, one for supporting tactics and one for attacking ones.
+Or we add a check on each tactic if it's supporting or attacking, and filter through using that. 
+
+Setting up something this complicated is impossible to do upfront. 
+Instead, I should add as needed. This might take me longer but I'll have immidiate testing. 
+Then again, good planning will save me some time in the long run. 
+But I have all the time in the world. 
+
+Let's sum up all the variables together and what it means:
+-> Units have favorite tactics
+-> Tactics are either supporting or attacking
+-> Units will opt to pick between a supporting and attacking tactic based on their temperment. 
+-> The same tactic can be used by both enemy and ally (Targetting list taken must be assumed valid.)
+-> Units have favorite targets. (Send a list of all units on node in decending order?)
+-> Nodes and units all have modifiers that affect how much a tactic does. 
+    -> Should be handled inside the tactic. (Send Node info to tactic.)
+-> Multiple targets. Which means time needs to be placed for each target. 
+
+
+Tactic takes a node, a calling unit, and a single target to apply stuff to.
+    -> The unit given is assumed the right faction and the right priority for the calling unit. 
+    -> Tactic will lookup the calling unit's class and apply modifiers as needed.
+    -> Tactic will lookup the node's special effects and apply modifiers as needed.
+    -> Tactic will only give combat manager information to work with. It will not puppeteer anything. 
+
+UnitCore needs a function to pick a favored tactic based on the unit's parameters. 
+UnitCore needs a function to pick a sorted list of targets based on the unit's parameters. 
+UnitCore hands these two to CombatManager. 
+CombatManager needs to loop through a given list of targets, using the tactic chosen as the size of the loop. 
+-> In each loop, the tactic needs to be called again, as each target might change the values the tactic returns. 
+-> CombatManager needs to use tactics to assign damage/healing, ect to units at the right time.
+
+All of this needs to be modular enough new check functions can be added into it. 

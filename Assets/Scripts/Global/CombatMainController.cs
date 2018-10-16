@@ -40,9 +40,8 @@ public class CombatMainController : MonoBehaviour {
 		yield return new WaitForSeconds(0.5f);
 
 		UnitCore thisUnit = MainUnit.GetComponent<UnitCore>();
-		Tactic testStrat = thisUnit.selectTactic();
-		Debug.Log(thisUnit.name + " now pretends it's doing something to someone.");
-		testStrat.onUse(currentNode, thisUnit);
+		UnitCore.targettingPackage package = thisUnit.getTargetandTactic();
+		package.SelectedTactic.onUse(currentNode, MainUnit, package.TargetList);
 		StartCoroutine(debugwaitDefender());
 	}
 

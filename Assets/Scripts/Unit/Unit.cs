@@ -13,6 +13,7 @@ using UnityEngine.UI;
 public class Unit : ScriptableObject {
 	public string faction;
 	public string unitName;
+	public string unitClass;
 	public Sprite artwork;
 	public Sprite portrait;
 	public GameObject UI;

@@ -14,6 +14,7 @@ using TMPro;
 
 namespace cakeslice
 {
+
 public class UnitCore : MonoBehaviour {
 
 	public Unit thisunit;
@@ -53,6 +54,11 @@ public class UnitCore : MonoBehaviour {
 		GeneratedUI.GetComponentInChildren<Image>().sprite = thisunit.portrait;		
 		home = AssignToWaypoint();
 		
+		setWayPointHome();
+		FilterTactics();
+	}
+
+	void setWayPointHome(){
 		if(thisunit.faction =="Player"){
 			this.gameObject.GetComponent<Outline>().color = 3;
 			GeneratedUI.transform.SetParent(GameObject.Find("Player Panel").transform, false);
@@ -63,7 +69,6 @@ public class UnitCore : MonoBehaviour {
 			GeneratedUI.transform.SetParent(GameObject.Find("Enemy Panel").transform, false);
 			GetComponent<Movement>().MoveTo(home, "Left", home.Enemies.Count, false);
 		}
-
 	}
 
 	void update(){
@@ -92,12 +97,90 @@ public class UnitCore : MonoBehaviour {
 			CombatManager.GetComponent<CombatMainController>().SendInformation(this.gameObject);
 			CombatManager.GetComponent<CombatCameraController>().CombatStart(newHome);
 		}
+		home = newHome;
 	}
 
-	//This function will eventually become huge. Should unitcore hold it or the unit SO itself? 
-	public Tactic selectTactic(){
-		return thisunit.tactics[Random.Range(0, thisunit.tactics.Count)];
+
+
+	public List<Tactic> Supporting;
+	public List<Tactic> Attacking;
+
+	//Goes through the unit's tactics and filters them into supporting or attacking lists. 
+	public void FilterTactics(){
+		foreach(Tactic item in thisunit.tactics){
+			if (item.isSupport) Supporting.Add(item);
+			else Attacking.Add(item);
+		}
 	}
+
+	//This function will eventually become huge. 
+	//This function will select a tactic. If flow is set to true, it will return a support tactic, else an attacking one.
+	public Tactic selectTactic_isSupport(bool flow){
+
+		if(flow){
+			if(Supporting.Count != 0){
+				return Supporting[Random.Range(0, Supporting.Count)];
+			}
+		}
+		else{
+			if(Attacking.Count != 0){
+				return Attacking[Random.Range(0, Attacking.Count)];
+			}
+		}
+		Debug.Log("ERROR: " + thisunit.name + " has no tactics assigned to it!");
+		return null;
+	}
+
+	//This function returns a list of opposing targets if flow is true, or allied targets if flow is false.  
+	public List<GameObject> selectAllEnemies(bool flow){
+		if(thisunit.faction == "Player"){
+			if(flow){
+				return home.Enemies;
+			}
+			else return home.Allies;
+		}
+		else{
+			if(flow){
+				return home.Allies;
+			}
+			else{
+				return home.Enemies;
+			}
+		}
+		
+	}
+
+	public struct targettingPackage{
+		public GameObject TargetList;
+		public Tactic SelectedTactic;
+
+		public targettingPackage(GameObject Target, Tactic tactic){
+			TargetList = Target;
+			SelectedTactic = tactic;
+		}
+	}
+
+	public GameObject selectFrom(List<GameObject> targets){
+		GameObject selected = targets[Random.Range(0, targets.Count)];
+		//Debug.Log("Selected unit: " + selected.name);
+		return targets[Random.Range(0, targets.Count)];
+	}
+
+
+	//TargettingPackage holds a gameobject list containing all info unit might need. 
+	public targettingPackage getTargetandTactic(){
+		//decide if a supporting package should be sent.
+		//decide if an attacking package should be sent.
+		//Decide on a list of friendly or enemy targets. 
+		//Organize that list based on unit preferences. 
+
+		//For now, let's default to a random tactic. 
+		
+		GameObject selectedTarget = selectFrom(selectAllEnemies(true));
+		return new targettingPackage( selectedTarget, selectTactic_isSupport(false));
+	}
+
+	
 
 	public void death(){
 		if(this.gameObject != null){
