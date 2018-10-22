@@ -151,13 +151,6 @@ The real meat is getting the correct targets lined up. Or rather, filtering the 
 Now there needs to be a way to stop a support unit from using it's buff on itself. 
 Done, but now there's more filtering to do. 
 
-How does a unit decide what it wants to use? 
-Let's use an example: 
+Done with that part. 
+Now, TODO is to impliment a method for multiple-targets. If done right, this should also work for multi-target support tactics.
 
-A support unit favors using support tactics above attacking tactics.
-It runs into a node with both enemies and allies. 
-It has 3/4 chances of using a support tactic on an ally and 1/4 chances of using an attack instead, starting with vanguards. 
-
-A blockade unit favors using attacking tactics above support tactics. 
-It runs into a node with both enemies and allies. 
-It has 3/4ths chances of using an attack tactic on an enemy, starting with vanguards first. 

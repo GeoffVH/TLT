@@ -36,6 +36,8 @@ public class Movement : MonoBehaviour {
     }
 
 	//String side must be either Right or Left
+	//All nodes have "Slots", roughly a small zone where the unit could end at. 
+	//These slots stop units from piling on top of each other by accident. 
 	public void MoveTo(Waypoint home, string side, int SlotRange, bool startCombat){
 		if(SlotRange == 0){
 			placingX = Random.Range(0,0f);

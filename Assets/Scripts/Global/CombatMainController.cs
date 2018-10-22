@@ -32,10 +32,6 @@ public class CombatMainController : MonoBehaviour {
 		StartCoroutine(debugwaitAttacker());
 	}
 
-	public void SendInformation(GameObject called){
-		CallingUnits.Add(called);
-	}
-
 	IEnumerator debugwaitAttacker(){
 		yield return new WaitForSeconds(0.5f);
 
@@ -48,5 +44,9 @@ public class CombatMainController : MonoBehaviour {
 	IEnumerator debugwaitDefender(){
 		yield return new WaitForSeconds(0.5f);
 		this.gameObject.GetComponent<CombatCameraController>().CombatEnds();
+	}
+
+	public void SendInformation(GameObject called){
+		CallingUnits.Add(called);
 	}
 }

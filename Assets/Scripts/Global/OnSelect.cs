@@ -146,31 +146,7 @@ namespace cakeslice
 					StartCoroutine(SetupLine(node, false));
 				}
 			}
-			
-
-/* 
-			foreach(GameObject troop in selected){
-				Waypoint oldHome = new GetClosestWaypoint().search(troop.transform.position);
-				Waypoint newHome = node.GetComponent<Waypoint>();
-				Unit troopInfo = troop.GetComponent<UnitCore>().thisunit;
-				troop.GetComponent<Outline>().enabled = false;
-				troop.GetComponent<UnitCore>().isSelected = false;
-
-				if(oldHome == newHome) continue;
-				
-				if(troopInfo.faction == "Player"){
-					oldHome.AllyRemove(troop);
-					newHome.AllyAdd(troop);
-					troop.GetComponent<Movement>().MoveTo(newHome, "Right", newHome.Allies.Count, true);
-				}
-
-				if(troopInfo.faction == "Enemy"){
-					oldHome.EnemyRemove(troop);
-					newHome.EnemyAdd(troop);
-					troop.GetComponent<Movement>().MoveTo(newHome, "Left", newHome.Enemies.Count, true);
-				}
-			}
- */
+		
 		}
 	}
 }

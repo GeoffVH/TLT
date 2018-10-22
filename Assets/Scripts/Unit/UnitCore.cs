@@ -32,9 +32,11 @@ public class UnitCore : MonoBehaviour {
 	Renderer _renderer;
 	int shaderProperty;
 	public Waypoint home;
+	private	GameObject CombatManager;
 
 	// Use this for initialization
 	void Start () {
+		CombatManager = GameObject.Find("GameManager");
 		isPaused = false;
 		_renderer = GetComponent<Renderer>();
 		PS_Flakes = this.gameObject.transform.Find("DeathEvent").gameObject;
@@ -85,8 +87,9 @@ public class UnitCore : MonoBehaviour {
 		return home;
 	}
 
+	//Meant to be called when a unit reaches a new waypoint. 
+	//This kickstarts all combat.
 	public void ArriveAt(Waypoint newHome){
-		GameObject CombatManager = GameObject.Find("GameManager");
 		if(thisunit.faction == "Player" && newHome.Enemies.Count > 0 && isPaused == false) {
 			//Debug.Log(this.name + " is sending information to the combat controller now.");
 			CombatManager.GetComponent<CombatMainController>().SendInformation(this.gameObject);
@@ -168,8 +171,8 @@ public class UnitCore : MonoBehaviour {
 	}
 
 	//Returns a tactic that the unit chooses to use.
-	//Unit should be able to pick from all it's tactics, with albit with weighting. 
-	//condition: Support tactics can't be used if there are no supporting units. 
+	//Unit should be able to pick from all it's tactics, albit with weighting. 
+	//Condition: Support tactics can't be used if there are no supporting units. 
 	//Condition: Attacking tactics can't be used if there are no enemy units. 
 	public Tactic DecideOnTactic(){
 
@@ -210,6 +213,7 @@ public class UnitCore : MonoBehaviour {
 		return SelectedTarget;
 	}
 
+	//Removes this unit from play
 	public void death(){
 		if(this.gameObject != null){
 			Waypoint home = new GetClosestWaypoint().search(this.transform.position);
@@ -247,12 +251,6 @@ public class UnitCore : MonoBehaviour {
  
 
 	/*
-	public void startCombat(Waypoint newHome){
-
-		int size = thisunit.tactics.Length;
-		int randomPick = Random.Range(0, size);
-		thisunit.tactics[randomPick].onUse(newHome, this);
-	}
 		//TODO: Refactor code because it looks like shit right now.
 		//TODO: Impliment disolve effect on removed units. 		
 		//TODO: Add camera re-focusing on waypoint when selected.

@@ -1,0 +1,41 @@
+Overview of the current architecture. 
+
+Movement:
+
+When a unit is selected, OnSelect will keep track of that unit. 
+On being moved, OnSelect will call up the unit's movement script. 
+Movement will wait until the unit arrives at the node and notifies the unit it can begin a check for combat. 
+
+Combat:
+A check for combat is triggered each time a unit walks onto a node. This is started with the ArriveAt() function in UnitCore.
+ArriveAt() will check the newly entered node to see if there are opposing units. 
+If there are, this unit will add itself to the list of units that the combat controller needs to cycle through.
+Additionally, the CombatCameraController's OnCombatStart() function is activated. 
+
+The CombatCameraController is activated by OnCombatStart()
+It will pause the game, turn off other camera scripts and move the camera to face the node. 
+Once the camera is in position, it will trigger a unity event to alert the CombatMainController that the camera is ready.
+
+The CombatMainController listens for this trigger, and runs OnCombatStart()
+The combat controller will pop out the last unit added to it's list of units it needs to handle. 
+It will wait .5 seconds, during which animation will be added to showcase the attacking unit using a tactic. 
+After that, it will resolve combat. 
+
+Combat is resolved by requesting the unit to return a targetting package. 
+This package contains a list of targets, and a selected tactic to be used. 
+The selected tactic will be called to work and sent information it needs to resolve all calculations. 
+
+Another .5 seconds will pass, during which the defending unit will play it's animation. 
+After, the camera controller will be tasked to return the camera to it's original spot. 
+
+
+TODO:
+This is very non-modular and needs to be split up further. As it stands very few of these functions can be tested without
+having other modules present to test with. 
+
+The goal is to have a setup where unexpected additions can be easily filled into the setup. 
+The real problem is the timing functions. Certain things need to be executed only when certain conditions are met. 
+
+
+
+
