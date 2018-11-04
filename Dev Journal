@@ -154,3 +154,43 @@ Done, but now there's more filtering to do.
 Done with that part. 
 Now, TODO is to impliment a method for multiple-targets. If done right, this should also work for multi-target support tactics.
 
+Ok, after taking a break and doing a lot of whiteboarding I have come to the conclusion that my current setup is not good long term.
+How combat is triggered is not correct. Which means movement itself is also not designed well. 
+
+I don't feel like I've got enough control over movement and combat. They feel like juggling spinning plates. 
+To start, I'll modify movement so that it's not based on a single unit arriving on the node. 
+Instead, units selected will all move togethre to the target place, and once each arrive they'll turn a flag on themselves saying they're done moving. 
+Once all selected units report that they're done moving, then I'll go through each and ask them to resolve combat. 
+This should be a cleaner system and more manageable. 
+
+Combat itself is a mess. There's too many possible injections in the future for a static system. 
+What if I want dialog to also pop up every now and then in combat? 
+What if there's a story event that needs to happen during combat?
+What if the unit's turn of order is changed unexpectedly? 
+
+If I make it all in one combat manager, that script has to handle every possible event. Which makes it big. 
+And events depend on previous events to be made, which makes it a callback hell of nested corutines.
+Since time is a factor and things need to physically wait for others to complete. 
+
+Instead of trying to script this, I'm going to make a behavorial tree. 
+Each function will be a node instead. (Move camera up, Move camera back, Bring sprite up, start tactic, ect.)
+The tree will have all my conditions and will run the nodes. 
+Keeping all the logic without the implimentation on one script will keep it easier to organize. 
+It'll still be really long, but at least not cluttered. 
+
+Each node however will be a longer function since it'll be designed to work with minimal parameters and connections. 
+But I'll be able to divide all this out. 
+
+I don't think designing tactics as "Suport" or "Attack" is good. While it make it simple, it also limits game design too much. 
+What about tactics that deal damage to an enemy and then buffs a friend?
+I'll continue thinking about this. 
+
+So far I'm considering either having all tactics contain an attack part and a support part. 
+So a pure attacking tactic will have the attack part filled out, and the support part will be empty. 
+Vice versa. 
+This lets me standardize tactics somewhat, while leaving me the option to do stuff with it.
+But it will make it more difficult for a unit to know which it's supposed to use more often of. 
+
+I could also add a third category. Have a support tactic, an attacking tactic, or a hybrid tactic. 
+Choices choices. I think the previous option is a better pick, but I'll need to think on it more. 
+

@@ -75,7 +75,7 @@ namespace cakeslice
 					
 				}
 
-				//Unselect all units out there.
+				//Deselect all units out there if the click is not a unit or a waypoint.
 				else
 				{
 					foreach(GameObject item in selected){
@@ -86,26 +86,34 @@ namespace cakeslice
 				}
 			}
 
-			//Move units to right clicked node. 
+			//If the right click is on a waypoint, move all units currently selected to that waypoint.
 			if (Input.GetMouseButtonDown(1)){
-
 				if( Physics.Raycast( ray, out hit, Mathf.Infinity, Moveable ) )
 				{
 					GameObject node = hit.transform.gameObject;
-					Vector3 yOffset = new Vector3(0.0f, 1.0f, 0.0f);
-					StartCoroutine(LerpFromTo(CameraOrbit.transform.position, node.transform.position, 1f, CameraOrbit) );
-					StartCoroutine(LerpFromTo(CameraFocus.transform.position, node.transform.position+yOffset, 1f, CameraFocus) );
-					//Can do a check for each unit to see if their home node has a waypoint connected to the node.
+					MoveCameraToWaypoint(node);
+					//StartCoroutine(SetupLine(node, true));
+
+					//Include in each unit a bool flag to check if the unit is done moving or still moving.
+					//This check is inside the unit's update function. If it's target position is where it currenly is, it's done moving.
+					//If it's done moving have the unit itself turn off it's outline. 
+					//When each unit arrives at the node, do not remove them from the selected array just yet.
+					//Make a flag for if we're in the combat phase or not. 
+					//Once all units report they've arrived, trigger the combat flag.
+					//Go through each unit in the selected and ask them to run their combat suite. 
+					//OnSelect does no check to see if there's an actual reason to start combat or not.
+					//Instead, it'll be the unit's combat suite that checks if it should fight or do nothing. 
 					
-					//Detatch each troop from the previous node.
-					//Attatch each troop to the new node.
-					//Move each troop selected to the new node.
-					//Toggle off highlight
-					//Deselect all units, and clear the list.
-					StartCoroutine(SetupLine(node, true));
+
 					
 				}
 			}
+		}
+
+		private void MoveCameraToWaypoint(GameObject node){
+			Vector3 yOffset = new Vector3(0.0f, 1.0f, 0.0f);
+			StartCoroutine(LerpFromTo(CameraOrbit.transform.position, node.transform.position, 1f, CameraOrbit) );
+			StartCoroutine(LerpFromTo(CameraFocus.transform.position, node.transform.position+yOffset, 1f, CameraFocus) );
 		}
 
 		//This function is a total mess and needs some polish and refactoring - but it works just well enough :D
