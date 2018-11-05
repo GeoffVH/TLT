@@ -194,3 +194,17 @@ But it will make it more difficult for a unit to know which it's supposed to use
 I could also add a third category. Have a support tactic, an attacking tactic, or a hybrid tactic. 
 Choices choices. I think the previous option is a better pick, but I'll need to think on it more. 
 
+While coding the refactored movement, I've streamlined things a bit.
+When units get an order to move to a waypoint, they will begin moving.
+While moving their movement script has a bool flag letting the player know they're moving.
+    True if the unit is moving, false if it is not. 
+A corutine is run right after the order, which will be watching all the units selected. 
+Once every unit selected has their movement declared over, the corutine will continue.
+It will then send the selected array to the combat manager. 
+Afterwhich, it will clean up the selected array. 
+
+In this manner, I send a list of units that I know:
+1) Are all on the same node. 
+2) Have all completed their movement and are awaiting possible combat. 
+
+After that, combat itself can grab that array and do their thing. 

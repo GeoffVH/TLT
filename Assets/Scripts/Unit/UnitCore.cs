@@ -55,21 +55,21 @@ public class UnitCore : MonoBehaviour {
 		GeneratedUI.GetComponent<LinkDebugToUnit>().ColorFlash(Color.black);
 		GeneratedUI.GetComponentInChildren<Image>().sprite = thisunit.portrait;		
 		home = AssignToWaypoint();
-		
-		setWayPointHome();
+		SetFactionSpecificItems();
 		FilterTactics();
 	}
 
-	void setWayPointHome(){
+	//initializes items specific to either player or enemy units. 
+	void SetFactionSpecificItems(){
 		if(thisunit.faction =="Player"){
 			this.gameObject.GetComponent<Outline>().color = 3;
 			GeneratedUI.transform.SetParent(GameObject.Find("Player Panel").transform, false);
-			GetComponent<Movement>().MoveTo(home, "Right", home.Allies.Count, false);
+			GetComponent<Movement>().MoveTo(home, "Right", home.Allies.Count);
 		}		
 		if(thisunit.faction =="Enemy"){
 			this.gameObject.GetComponent<Outline>().color = 0;
 			GeneratedUI.transform.SetParent(GameObject.Find("Enemy Panel").transform, false);
-			GetComponent<Movement>().MoveTo(home, "Left", home.Enemies.Count, false);
+			GetComponent<Movement>().MoveTo(home, "Left", home.Enemies.Count);
 		}
 	}
 
@@ -89,6 +89,7 @@ public class UnitCore : MonoBehaviour {
 
 	//Meant to be called when a unit reaches a new waypoint. 
 	//This kickstarts all combat.
+	//May be depreciated. 
 	public void ArriveAt(Waypoint newHome){
 		if(thisunit.faction == "Player" && newHome.Enemies.Count > 0 && isPaused == false) {
 			//Debug.Log(this.name + " is sending information to the combat controller now.");
@@ -248,18 +249,5 @@ public class UnitCore : MonoBehaviour {
              yield return null;
          }
      }
- 
-
-	/*
-		//TODO: Refactor code because it looks like shit right now.
-		//TODO: Impliment disolve effect on removed units. 		
-		//TODO: Add camera re-focusing on waypoint when selected.
-		//TODO: Add more cool camera shit to do.
-		//TODO: Add class lists on the unit code and use it to apply modifiers to units. 
-		//TODO: Box Selection.
-		//TODO: On hover over UI element, select unit but unselect when off hover.
-		//TODO: On clicking over UI element, add unit to selection. 
-		 */
-	
 }
 }

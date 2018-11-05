@@ -15,30 +15,33 @@ public class Movement : MonoBehaviour {
 	public float speed = 7.5f;
 	Vector3 target;
 	public ParticleSystem ps;
-	private float placingX;
-	private float placingZ;
+	public bool isMoving;
 
 	void Start(){
 		target = transform.position;
+		isMoving = false;
 	}
 
     void Update()
     {
-        // Move our position a step closer to the target, If the unit is not paused.
+        //if the unit is not paused and not currently standing on it's home position, it will move. 
 		if(transform.position != target && GetComponent<UnitCore>().isPaused == false){
 			ps.Play();
         	transform.position = Vector3.MoveTowards(transform.position, target, speed * Time.deltaTime);
+			isMoving = true;
 		}
 		else{
 			ps.Stop();
-			//transform.position = Vector3.MoveTowards(transform.position, target, speed * 0);
+			isMoving = false;
 		}
     }
 
-	//String side must be either Right or Left
 	//All nodes have "Slots", roughly a small zone where the unit could end at. 
-	//These slots stop units from piling on top of each other by accident. 
-	public void MoveTo(Waypoint home, string side, int SlotRange, bool startCombat){
+	//These slots stop units from piling on top of each other by accident.
+	//String Side needs to be either "Right" or "Left", which will funnel the unit to said side of the node. 
+	private float placingX;
+	private float placingZ;
+	public void MoveTo(Waypoint home, string side, int SlotRange){
 		if(SlotRange == 0){
 			placingX = Random.Range(0,0f);
 			placingZ = Random.Range(0f,0f);
@@ -75,15 +78,16 @@ public class Movement : MonoBehaviour {
 		if(side == "Right"){			
 			Vector3 newtarget = new Vector3(home.transform.position.x+placingX, home.transform.position.y+0.7879867f, home.transform.position.z+placingZ);
 			target = newtarget;
-			if(startCombat) StartCoroutine(WaitTillArrival(newtarget, home)); 
+			//StartCoroutine(WaitTillArrival(newtarget, home)); 
 		}
 		if(side=="Left"){
 			Vector3 newtarget = new Vector3(home.transform.position.x-placingX, home.transform.position.y+0.7879867f, home.transform.position.z-placingZ);
 			target = newtarget;
-			if(startCombat) StartCoroutine(WaitTillArrival(newtarget, home)); 
+			//StartCoroutine(WaitTillArrival(newtarget, home)); 
 		}
 	}
 	
+	//Old combat system. 
 	IEnumerator WaitTillArrival(Vector3 newtarget, Waypoint home){
 		yield return new WaitUntil(() => this.transform.position == newtarget);
 		GetComponent<UnitCore>().ArriveAt(home);
